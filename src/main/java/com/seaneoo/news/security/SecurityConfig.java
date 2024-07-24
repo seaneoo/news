@@ -2,6 +2,7 @@ package com.seaneoo.news.security;
 
 import com.seaneoo.news.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,19 +14,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfig {
 
-	// TODO 2024-07-23, 16:01 Set these values in the application properties
-	private static final int ARGON2_SALT_LENGTH = 32;
-	private static final int ARGON2_HASH_LENGTH = 64;
-	private static final int ARGON2_PARALLELISM = 4;
-	private static final int ARGON2_MEMORY = 65_536;
-	private static final int ARGON2_ITERATIONS = 3;
+	@Value("${security.argon2.salt-length}")
+	private int saltLength;
+
+	@Value("${security.argon2.hash-length}")
+	private int hashLength;
+
+	@Value("${security.argon2.parallelism}")
+	private int parallelism;
+
+	@Value("${security.argon2.memory}")
+	private int memory;
+
+	@Value("${security.argon2.iterations}")
+	private int iterations;
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new Argon2PasswordEncoder(ARGON2_SALT_LENGTH, ARGON2_HASH_LENGTH, ARGON2_PARALLELISM, ARGON2_MEMORY, ARGON2_ITERATIONS);
+		return new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memory, iterations);
 	}
 
 	@Bean
