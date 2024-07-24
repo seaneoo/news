@@ -27,9 +27,9 @@ public class AuthController {
 	}
 
 	@PostMapping("/authenticate")
-	public ResponseEntity<User> authenticate(@RequestBody @Valid AuthenticatePayload payload) {
-		var user = userService.authenticate(payload);
-		// TODO 2024-07-23, 15:29
-		throw new UnsupportedOperationException("Not yet implemented");
+	public ResponseEntity<String> authenticate(@RequestBody @Valid AuthenticatePayload payload) {
+		var token = userService.authenticate(payload);
+		return ResponseEntity.ok(token);
 	}
 }
+
