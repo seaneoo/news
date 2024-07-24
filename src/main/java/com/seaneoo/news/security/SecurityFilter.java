@@ -28,7 +28,7 @@ public class SecurityFilter {
 			.headers(headers ->
 				headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 			.authorizeHttpRequests(http ->
-				http.requestMatchers("/h2-console/**", "/auth/**").permitAll()
+				http.requestMatchers("/h2-console/**", "/error/**", "/auth/**").permitAll()
 					.anyRequest().authenticated())
 			.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
 			.authenticationManager(authenticationManager)
