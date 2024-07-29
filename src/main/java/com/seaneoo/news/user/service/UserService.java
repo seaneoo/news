@@ -1,5 +1,6 @@
 package com.seaneoo.news.user.service;
 
+import com.seaneoo.news.error.exception.UserNotFoundException;
 import com.seaneoo.news.security.JwtService;
 import com.seaneoo.news.user.entity.User;
 import com.seaneoo.news.user.model.AuthenticatePayload;
@@ -34,7 +35,12 @@ public class UserService {
 	}
 
 	public String authenticate(AuthenticatePayload payload) {
-		var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(payload.getUsername().toLowerCase(), payload.getPassword()));
+		var userOptional = userRepository.findByUsername(payload.getUsername().toLowerCase());
+		if (userOptional.isEmpty()) {
+			throw new UserNotFoundException();
+		}
+
+		var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userOptional.get().getUsername(), payload.getPassword()));
 		var user = (User) auth.getPrincipal();
 		return jwtService.generateToken(user);
 	}
