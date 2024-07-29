@@ -1,5 +1,6 @@
 package com.seaneoo.news.user.service;
 
+import com.seaneoo.news.error.exception.MismatchedPasswordsException;
 import com.seaneoo.news.error.exception.UserAlreadyRegisteredException;
 import com.seaneoo.news.error.exception.UserNotFoundException;
 import com.seaneoo.news.security.JwtService;
@@ -30,7 +31,10 @@ public class UserService {
 	private JwtService jwtService;
 
 	public User register(RegisterPayload payload) {
-		// TODO 2024-07-23, 15:28 Error handling and verification
+		if (!payload.getPassword().equals(payload.getVerifyPassword())) {
+			throw new MismatchedPasswordsException();
+		}
+
 		var hashedPassword = passwordEncoder.encode(payload.getPassword());
 		var user = User.builder().username(payload.getUsername().toLowerCase()).password(hashedPassword).build();
 

@@ -1,5 +1,6 @@
 package com.seaneoo.news.user.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -17,5 +18,7 @@ public class RegisterPayload {
 	@Size(min = 8, message = "Password must be at least 8 characters.")
 	String password;
 
-	// TODO 2024-07-23, 15:37 Add a field for verifying the password
+	@NotBlank(message = "Password verification field is required.")
+	@JsonProperty("verify_password")
+	String verifyPassword;
 }
