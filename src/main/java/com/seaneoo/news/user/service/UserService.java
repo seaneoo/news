@@ -1,5 +1,6 @@
 package com.seaneoo.news.user.service;
 
+import com.seaneoo.news.error.exception.UserAlreadyRegisteredException;
 import com.seaneoo.news.error.exception.UserNotFoundException;
 import com.seaneoo.news.security.JwtService;
 import com.seaneoo.news.user.entity.User;
@@ -7,6 +8,7 @@ import com.seaneoo.news.user.model.AuthenticatePayload;
 import com.seaneoo.news.user.model.RegisterPayload;
 import com.seaneoo.news.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +33,12 @@ public class UserService {
 		// TODO 2024-07-23, 15:28 Error handling and verification
 		var hashedPassword = passwordEncoder.encode(payload.getPassword());
 		var user = User.builder().username(payload.getUsername().toLowerCase()).password(hashedPassword).build();
-		return userRepository.save(user);
+
+		try {
+			return userRepository.save(user);
+		} catch (DataIntegrityViolationException e) {
+			throw new UserAlreadyRegisteredException();
+		}
 	}
 
 	public String authenticate(AuthenticatePayload payload) {
