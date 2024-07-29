@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class AuthenticatePayload {
 
-	@NotBlank(message = "Username is required.")
+	@NotBlank(message = "Username field is required.")
 	String username;
 
-	@NotBlank(message = "Password is required.")
+	@NotBlank(message = "Password field is required.")
 	String password;
 }

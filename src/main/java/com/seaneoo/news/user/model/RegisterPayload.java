@@ -9,12 +9,12 @@ import lombok.Data;
 @Data
 public class RegisterPayload {
 
-	@NotBlank(message = "Username is required.")
+	@NotBlank(message = "Username field is required.")
 	@Size(min = 2, max = 20, message = "Username must be between 2 and 20 characters.")
 	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Username can only contain letters and numbers.")
 	String username;
 
-	@NotBlank(message = "Password is required.")
+	@NotBlank(message = "Password field is required.")
 	@Size(min = 8, message = "Password must be at least 8 characters.")
 	String password;
 

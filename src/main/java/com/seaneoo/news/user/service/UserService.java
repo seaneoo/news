@@ -1,7 +1,7 @@
 package com.seaneoo.news.user.service;
 
 import com.seaneoo.news.error.exception.MismatchedPasswordsException;
-import com.seaneoo.news.error.exception.UserAlreadyRegisteredException;
+import com.seaneoo.news.error.exception.UsernameTakenException;
 import com.seaneoo.news.error.exception.UserNotFoundException;
 import com.seaneoo.news.security.JwtService;
 import com.seaneoo.news.user.entity.User;
@@ -41,7 +41,7 @@ public class UserService {
 		try {
 			return userRepository.save(user);
 		} catch (DataIntegrityViolationException e) {
-			throw new UserAlreadyRegisteredException();
+			throw new UsernameTakenException();
 		}
 	}
 
