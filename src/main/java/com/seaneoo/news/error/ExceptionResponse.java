@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
@@ -25,4 +26,6 @@ public class ExceptionResponse {
 	public Instant timestamp;
 
 	public String message;
+
+	public List<String> errors;
 }
