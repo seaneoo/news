@@ -1,5 +1,6 @@
 package com.seaneoo.news.security;
 
+import com.seaneoo.news.error.exception.UserNotFoundException;
 import com.seaneoo.news.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +42,7 @@ public class SecurityConfig {
 	public UserDetailsService userDetailsService() {
 		return username -> {
 			if (username == null) throw new RuntimeException("User not found.");
-			return userRepository.findByUsername(username).orElseThrow();
+			return userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
 		};
 	}
 
