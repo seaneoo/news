@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -74,5 +75,10 @@ public class UserService {
 		} catch (DataIntegrityViolationException e) {
 			throw new UsernameTakenException();
 		}
+	}
+
+	public void deleteAccount(Authentication authentication) {
+		var user = (User) authentication.getPrincipal();
+		userRepository.delete(user);
 	}
 }
