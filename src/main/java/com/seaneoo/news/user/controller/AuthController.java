@@ -31,13 +31,13 @@ public class AuthController {
 		return ResponseEntity.ok(token);
 	}
 
-	@PostMapping("/change_password")
+	@PostMapping("/change-password")
 	public ResponseEntity<User> changePassword(@RequestBody @Valid ChangePasswordPayload payload) {
 		var user = userService.changePassword(payload);
 		return ResponseEntity.ok(user);
 	}
 
-	@DeleteMapping("/delete_account")
+	@DeleteMapping("/delete-account")
 	public ResponseEntity<Object> deleteAccount(Authentication authentication) {
 		userService.deleteAccount(authentication);
 		return ResponseEntity.status(HttpStatus.GONE).build();
