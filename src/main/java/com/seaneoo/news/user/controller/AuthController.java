@@ -2,6 +2,7 @@ package com.seaneoo.news.user.controller;
 
 import com.seaneoo.news.user.entity.User;
 import com.seaneoo.news.user.model.AuthenticatePayload;
+import com.seaneoo.news.user.model.ChangePasswordPayload;
 import com.seaneoo.news.user.model.RegisterPayload;
 import com.seaneoo.news.user.service.UserService;
 import jakarta.validation.Valid;
@@ -31,5 +32,10 @@ public class AuthController {
 		var token = userService.authenticate(payload);
 		return ResponseEntity.ok(token);
 	}
-}
 
+	@PostMapping("/change_password")
+	public ResponseEntity<User> changePassword(@RequestBody @Valid ChangePasswordPayload payload) {
+		var user = userService.changePassword(payload);
+		return ResponseEntity.ok(user);
+	}
+}

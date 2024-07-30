@@ -1,11 +1,12 @@
 package com.seaneoo.news.user.service;
 
 import com.seaneoo.news.error.exception.MismatchedPasswordsException;
-import com.seaneoo.news.error.exception.UsernameTakenException;
 import com.seaneoo.news.error.exception.UserNotFoundException;
+import com.seaneoo.news.error.exception.UsernameTakenException;
 import com.seaneoo.news.security.JwtService;
 import com.seaneoo.news.user.entity.User;
 import com.seaneoo.news.user.model.AuthenticatePayload;
+import com.seaneoo.news.user.model.ChangePasswordPayload;
 import com.seaneoo.news.user.model.RegisterPayload;
 import com.seaneoo.news.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,24 @@ public class UserService {
 		var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userOptional.get().getUsername(), payload.getPassword()));
 		var user = (User) auth.getPrincipal();
 		return jwtService.generateToken(user);
+	}
+
+	public User changePassword(ChangePasswordPayload payload) {
+		var userOptional = userRepository.findByUsername(payload.getUsername().toLowerCase());
+		if (userOptional.isEmpty()) {
+			throw new UserNotFoundException();
+		}
+
+		var auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userOptional.get().getUsername(), payload.getCurrentPassword()));
+		var user = (User) auth.getPrincipal();
+
+		var newHashedPassword = passwordEncoder.encode(payload.getNewPassword());
+		var newUser = user.toBuilder().password(newHashedPassword).build();
+
+		try {
+			return userRepository.save(newUser);
+		} catch (DataIntegrityViolationException e) {
+			throw new UsernameTakenException();
+		}
 	}
 }
